@@ -35,45 +35,35 @@
                 <div class="row row-eq-height">
                     {foreach $products as $key => $product}
                         {$idPrefix = ($product.bid) ? ("bundle"|cat:$product.bid) : ("product"|cat:$product.pid)}
-                    <div class="col-md-6">
-                        <div class="product clearfix" id="{$idPrefix}">
-                            <header>
-                                <span id="{$idPrefix}-name">{$product.name}</span>
+                        {* Determine if this is the recommended plan (typically Weekly or middle plan) *}
+                        {$isRecommended = ($key == 1 && $products|@count >= 3) || $product.pricing.minprice.cycle eq "weekly" || (isset($product.recommended) && $product.recommended)}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="product-card{if $isRecommended} recommended{/if}" id="{$idPrefix}">
+                            {if $isRecommended}
+                                <div class="recommended-badge">
+                                    <span>Recommended</span>
+                                </div>
+                            {/if}
+                            <header class="product-header">
+                                <h3 class="product-title" id="{$idPrefix}-name">{$product.name}</h3>
                                 {if $product.stockControlEnabled}
-                                    <span class="qty">
-                                            {$product.qty} {$LANG.orderavailable}
-                                        </span>
+                                    <span class="product-qty">
+                                        {$product.qty} {$LANG.orderavailable}
+                                    </span>
                                 {/if}
                             </header>
-                            <div class="product-desc">
-                                {if $product.featuresdesc}
-                                    <p id="{$idPrefix}-description">
-                                        {$product.featuresdesc}
-                                    </p>
-                                {/if}
-                                <ul>
-                                    {foreach $product.features as $feature => $value}
-                                        <li id="{$idPrefix}-feature{$value@iteration}">
-                                            <span class="feature-value">{$value}</span>
-                                            {$feature}
-                                        </li>
-                                    {/foreach}
-                                </ul>
-                            </div>
-                            <footer>
-                                <div class="product-pricing" id="{$idPrefix}-price">
-                                    {if $product.bid}
-                                        {$LANG.bundledeal}<br />
-                                        {if $product.displayprice}
-                                            <span class="price">{$product.displayprice}</span>
-                                        {/if}
-                                    {else}
-                                        {if $product.pricing.hasconfigoptions}
-                                            {$LANG.startingfrom}
-                                            <br />
-                                        {/if}
-                                        <span class="price">{$product.pricing.minprice.price}</span>
-                                        <br />
+                            <div class="product-pricing-section" id="{$idPrefix}-price">
+                                {if $product.bid}
+                                    <div class="price-label">{$LANG.bundledeal}</div>
+                                    {if $product.displayprice}
+                                        <div class="price-main">{$product.displayprice}</div>
+                                    {/if}
+                                {else}
+                                    {if $product.pricing.hasconfigoptions}
+                                        <div class="price-label">{$LANG.startingfrom}</div>
+                                    {/if}
+                                    <div class="price-main">{$product.pricing.minprice.price}</div>
+                                    <div class="price-cycle">
                                         {if $product.pricing.minprice.cycle eq "monthly"}
                                             {$LANG.orderpaymenttermmonthly}
                                         {elseif $product.pricing.minprice.cycle eq "quarterly"}
@@ -87,20 +77,39 @@
                                         {elseif $product.pricing.minprice.cycle eq "triennially"}
                                             {$LANG.orderpaymenttermtriennially}
                                         {/if}
-                                        <br>
-                                        {if $product.pricing.minprice.setupFee}
-                                            <small>{$product.pricing.minprice.setupFee->toPrefixed()} {$LANG.ordersetupfee}</small>
-                                        {/if}
+                                    </div>
+                                    {if $product.pricing.minprice.setupFee}
+                                        <div class="setup-fee">{$product.pricing.minprice.setupFee->toPrefixed()} {$LANG.ordersetupfee}</div>
                                     {/if}
-                                </div>
-                                <a href="{$product.productUrl}" class="btn btn-success btn-sm btn-order-now" id="{$idPrefix}-order-button"{if $product.hasRecommendations} data-has-recommendations="1"{/if}>
+                                {/if}
+                            </div>
+                            <div class="product-description">
+                                {if $product.featuresdesc}
+                                    <p class="product-desc-text" id="{$idPrefix}-description">
+                                        {$product.featuresdesc}
+                                    </p>
+                                {/if}
+                                {if $product.features}
+                                    <ul class="product-features">
+                                        {foreach $product.features as $feature => $value}
+                                            <li class="feature-item" id="{$idPrefix}-feature{$value@iteration}">
+                                                <i class="fas fa-check"></i>
+                                                <span class="feature-value">{$value}</span>
+                                                <span class="feature-name">{$feature}</span>
+                                            </li>
+                                        {/foreach}
+                                    </ul>
+                                {/if}
+                            </div>
+                            <div class="product-footer">
+                                <a href="{$product.productUrl}" class="btn btn-order-now{if $isRecommended} btn-recommended{/if}" id="{$idPrefix}-order-button"{if $product.hasRecommendations} data-has-recommendations="1"{/if}>
                                     <i class="fas fa-shopping-cart"></i>
                                     {$LANG.ordernowbutton}
                                 </a>
-                            </footer>
+                            </div>
                         </div>
                     </div>
-                    {if $product@iteration % 2 == 0}
+                    {if $product@iteration % 3 == 0}
                 </div>
                 <div class="row row-eq-height">
                     {/if}
