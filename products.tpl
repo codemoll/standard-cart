@@ -36,7 +36,7 @@
                     {foreach $products as $key => $product}
                         {$idPrefix = ($product.bid) ? ("bundle"|cat:$product.bid) : ("product"|cat:$product.pid)}
                         {* Determine if this is the recommended plan (typically Weekly or middle plan) *}
-                        {$isRecommended = $key == 1 || $product.pricing.minprice.cycle eq "weekly"}
+                        {$isRecommended = ($key == 1 && $products|@count >= 3) || $product.pricing.minprice.cycle eq "weekly" || (isset($product.recommended) && $product.recommended)}
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="product-card{if $isRecommended} recommended{/if}" id="{$idPrefix}">
                             {if $isRecommended}
@@ -89,15 +89,17 @@
                                         {$product.featuresdesc}
                                     </p>
                                 {/if}
-                                <ul class="product-features">
-                                    {foreach $product.features as $feature => $value}
-                                        <li class="feature-item" id="{$idPrefix}-feature{$value@iteration}">
-                                            <i class="fas fa-check"></i>
-                                            <span class="feature-value">{$value}</span>
-                                            <span class="feature-name">{$feature}</span>
-                                        </li>
-                                    {/foreach}
-                                </ul>
+                                {if $product.features}
+                                    <ul class="product-features">
+                                        {foreach $product.features as $feature => $value}
+                                            <li class="feature-item" id="{$idPrefix}-feature{$value@iteration}">
+                                                <i class="fas fa-check"></i>
+                                                <span class="feature-value">{$value}</span>
+                                                <span class="feature-name">{$feature}</span>
+                                            </li>
+                                        {/foreach}
+                                    </ul>
+                                {/if}
                             </div>
                             <div class="product-footer">
                                 <a href="{$product.productUrl}" class="btn btn-order-now{if $isRecommended} btn-recommended{/if}" id="{$idPrefix}-order-button"{if $product.hasRecommendations} data-has-recommendations="1"{/if}>

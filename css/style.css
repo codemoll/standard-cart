@@ -409,6 +409,28 @@
     margin-right: 8px;
 }
 
+/* Legacy compatibility - hide old product styling when new cards are present */
+#order-standard_cart .products .product-card ~ .product {
+    display: none;
+}
+
+/* Ensure compatibility with existing WHMCS elements */
+#order-standard_cart .products .product-card .btn {
+    border: none;
+    text-align: center;
+}
+
+/* Make sure grid works properly */
+#order-standard_cart .products .row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+#order-standard_cart .products [class*="col-"] {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 /* Responsive Design */
 @media (max-width: 1199px) {
     #order-standard_cart .products .product-card {
