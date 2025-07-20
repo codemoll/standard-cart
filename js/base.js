@@ -2240,3 +2240,82 @@ function hasRenewableServiceAddon(data)
     });
     return hasService;
 }
+
+// Enhanced pricing table animations
+jQuery(document).ready(function() {
+    // Remove no-js class if JavaScript is enabled
+    jQuery('html').removeClass('no-js');
+    
+    // Add CSS class for better animation control
+    if (jQuery('#order-standard_cart .products').length) {
+        // Create intersection observer for pricing section animation
+        if (typeof IntersectionObserver !== 'undefined') {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('pricing-section-visible');
+                        
+                        // Trigger individual card animations with staggered delay
+                        var cards = entry.target.querySelectorAll('.product-card');
+                        cards.forEach(function(card, index) {
+                            setTimeout(function() {
+                                card.classList.add('card-visible');
+                            }, (index + 1) * 150);
+                        });
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            var pricingSection = document.querySelector('#order-standard_cart .products');
+            if (pricingSection) {
+                observer.observe(pricingSection);
+            }
+        } else {
+            // Fallback for browsers without IntersectionObserver
+            setTimeout(function() {
+                jQuery('#order-standard_cart .products').addClass('pricing-section-visible');
+                jQuery('#order-standard_cart .products .product-card').each(function(index) {
+                    var card = jQuery(this);
+                    setTimeout(function() {
+                        card.addClass('card-visible');
+                    }, (index + 1) * 150);
+                });
+            }, 500);
+        }
+    }
+    
+    // Enhanced button hover effects
+    jQuery('#order-standard_cart .products .btn-order-now').on('mouseenter', function() {
+        jQuery(this).find('i').addClass('fa-pulse');
+    }).on('mouseleave', function() {
+        jQuery(this).find('i').removeClass('fa-pulse');
+    });
+    
+    // Add ripple effect on card click
+    jQuery('#order-standard_cart .products .product-card').on('click', function(e) {
+        var card = jQuery(this);
+        var ripple = jQuery('<div class="ripple"></div>');
+        var rect = this.getBoundingClientRect();
+        var size = Math.max(rect.width, rect.height);
+        var x = e.clientX - rect.left - size / 2;
+        var y = e.clientY - rect.top - size / 2;
+        
+        ripple.css({
+            width: size + 'px',
+            height: size + 'px',
+            left: x + 'px',
+            top: y + 'px'
+        });
+        
+        card.append(ripple);
+        
+        setTimeout(function() {
+            ripple.remove();
+        }, 1000);
+    });
+});

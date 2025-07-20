@@ -216,7 +216,66 @@
     background-position: center;
     background-attachment: fixed;
     padding: 40px 0;
-    border-radius: 0;
+    border-radius: 16px;
+    position: relative;
+    overflow: visible;
+    opacity: 0;
+    animation: fadeInSection 1s ease-out 0.1s forwards;
+}
+
+/* Fallback for browsers without JavaScript */
+.no-js #order-standard_cart .products {
+    opacity: 1;
+}
+
+/* Fade in animation for pricing section */
+@keyframes fadeInSection {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Glowing animated shadow around pricing table */
+#order-standard_cart .products::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: linear-gradient(45deg, 
+        #32CD32, #ADFF2F, #98FB98, #90EE90, 
+        #32CD32, #ADFF2F, #98FB98, #90EE90);
+    background-size: 400% 400%;
+    border-radius: 20px;
+    z-index: -1;
+    animation: pricingGlow 3s ease-in-out infinite;
+    opacity: 0.8;
+    filter: blur(8px);
+}
+
+@keyframes pricingGlow {
+    0%, 100% {
+        background-position: 0% 50%;
+        transform: scale(1);
+    }
+    25% {
+        background-position: 100% 50%;
+        transform: scale(1.01);
+    }
+    50% {
+        background-position: 100% 100%;
+        transform: scale(1.02);
+    }
+    75% {
+        background-position: 0% 100%;
+        transform: scale(1.01);
+    }
 }
 
 /* Modern Product Card Styling */
@@ -235,6 +294,81 @@
     display: flex;
     flex-direction: column;
     backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Fallback for browsers without JavaScript */
+.no-js #order-standard_cart .products .product-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered animation delays for cards */
+#order-standard_cart .products .product-card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+#order-standard_cart .products .product-card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+#order-standard_cart .products .product-card:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+#order-standard_cart .products .product-card:nth-child(4) {
+    animation-delay: 0.8s;
+}
+
+/* Fade in animation for cards */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced animation classes for JavaScript control */
+#order-standard_cart .products.pricing-section-visible {
+    opacity: 1;
+}
+
+#order-standard_cart .products .product-card.card-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#order-standard_cart .products .product-card.recommended.card-visible {
+    opacity: 1;
+    transform: scale(1.05) translateY(0);
+}
+
+/* Ripple effect for card interactions */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(5, 136, 191, 0.15);
+    transform: scale(0);
+    animation: rippleEffect 0.8s ease-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes rippleEffect {
+    0% {
+        transform: scale(0);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
 #order-standard_cart .products .product-card:hover {
@@ -250,6 +384,35 @@
     box-shadow: 0 12px 40px rgba(5, 136, 191, 0.25), 0 6px 20px rgba(0, 123, 191, 0.15);
     transform: scale(1.05);
     background: linear-gradient(135deg, #ffffff, #f8fdff);
+    position: relative;
+}
+
+/* Enhanced glow for recommended card */
+#order-standard_cart .products .product-card.recommended::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, 
+        #0588bf, #1976d2, #42a5f5, #64b5f6, 
+        #0588bf, #1976d2, #42a5f5, #64b5f6);
+    background-size: 400% 400%;
+    border-radius: 19px;
+    z-index: -1;
+    animation: recommendedGlow 2s ease-in-out infinite;
+    opacity: 0.6;
+    filter: blur(6px);
+}
+
+@keyframes recommendedGlow {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 #order-standard_cart .products .product-card.recommended:hover {
@@ -451,6 +614,7 @@
     box-shadow: 0 4px 15px rgba(5, 136, 191, 0.3);
     position: relative;
     overflow: hidden;
+    transform: translateY(0);
 }
 
 #order-standard_cart .products .btn-order-now:before {
@@ -481,11 +645,24 @@
     box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
     font-size: 1.15em;
     padding: 18px 24px;
+    animation: pulseRecommended 2s ease-in-out infinite;
+}
+
+/* Pulse animation for recommended button */
+@keyframes pulseRecommended {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-1px) scale(1.02);
+    }
 }
 
 #order-standard_cart .products .btn-order-now.btn-recommended:hover {
     background: linear-gradient(135deg, #f4511e, #e64a19);
     box-shadow: 0 8px 25px rgba(255, 87, 34, 0.4);
+    animation: none;
+    transform: translateY(-3px) scale(1.02);
 }
 
 #order-standard_cart .products .btn-order-now i {
@@ -524,12 +701,21 @@
     #order-standard_cart .products .product-card.recommended {
         transform: scale(1.03);
     }
+    
+    #order-standard_cart .products .product-card.recommended:hover {
+        transform: translateY(-5px) scale(1.03);
+    }
 }
 
 @media (max-width: 991px) {
     #order-standard_cart .products {
         padding: 30px 0;
         background-attachment: scroll;
+    }
+    
+    #order-standard_cart .products::before {
+        filter: blur(6px);
+        opacity: 0.6;
     }
     
     #order-standard_cart .products .product-card {
@@ -546,6 +732,11 @@
         transform: translateY(-5px);
     }
     
+    #order-standard_cart .products .product-card.recommended::before {
+        filter: blur(4px);
+        opacity: 0.4;
+    }
+    
     #order-standard_cart .products .price-main {
         font-size: 2.5em;
     }
@@ -554,12 +745,25 @@
 @media (max-width: 767px) {
     #order-standard_cart .products {
         padding: 20px 10px;
+        border-radius: 12px;
+    }
+    
+    #order-standard_cart .products::before {
+        border-radius: 16px;
+        filter: blur(4px);
+        opacity: 0.5;
     }
     
     #order-standard_cart .products .product-card {
         margin-bottom: 25px;
         min-height: auto;
         border-radius: 12px;
+    }
+    
+    #order-standard_cart .products .product-card.recommended::before {
+        border-radius: 15px;
+        filter: blur(3px);
+        opacity: 0.3;
     }
     
     #order-standard_cart .products .product-header {
