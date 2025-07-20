@@ -46,6 +46,9 @@
                             {/if}
                             <header class="product-header">
                                 <h3 class="product-title" id="{$idPrefix}-name">{$product.name}</h3>
+                                {if $product.tagline}
+                                    <p class="product-tagline">{$product.tagline}</p>
+                                {/if}
                                 {if $product.stockControlEnabled}
                                     <span class="product-qty">
                                         {$product.qty} {$LANG.orderavailable}
