@@ -2243,6 +2243,9 @@ function hasRenewableServiceAddon(data)
 
 // Enhanced pricing table animations
 jQuery(document).ready(function() {
+    // Remove no-js class if JavaScript is enabled
+    jQuery('html').removeClass('no-js');
+    
     // Add CSS class for better animation control
     if (jQuery('#order-standard_cart .products').length) {
         // Create intersection observer for pricing section animation

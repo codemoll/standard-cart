@@ -223,6 +223,11 @@
     animation: fadeInSection 1s ease-out 0.1s forwards;
 }
 
+/* Fallback for browsers without JavaScript */
+.no-js #order-standard_cart .products {
+    opacity: 1;
+}
+
 /* Fade in animation for pricing section */
 @keyframes fadeInSection {
     0% {
@@ -292,6 +297,12 @@
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Fallback for browsers without JavaScript */
+.no-js #order-standard_cart .products .product-card {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Staggered animation delays for cards */
