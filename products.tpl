@@ -7,8 +7,8 @@
         </div>
         <div class="cart-body">
 
-            <div class="header-lined">
-                <h1 class="font-size-36">
+            <div class="header-lined pricing-header">
+                <h1 class="font-size-36 pricing-title">
                     {if $productGroup.headline}
                         {$productGroup.headline}
                     {else}
@@ -16,7 +16,7 @@
                     {/if}
                 </h1>
                 {if $productGroup.tagline}
-                    <p>{$productGroup.tagline}</p>
+                    <p class="pricing-subtitle">{$productGroup.tagline}</p>
                 {/if}
             </div>
             {if $errormessage}
